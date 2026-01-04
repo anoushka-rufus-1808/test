@@ -18,7 +18,11 @@ if "expenses" not in st.session_state:
     st.session_state["expenses"] = []
 
 st.subheader(f"Destination: {trip.get('destination', 'N/A')}")
-st.write(f"**Days:** {trip.get('days', 'N/A')} | **Travelers:** {trip.get('travelers', 'N/A')}")
+st.write(
+    f"**Dates:** {trip.get('start_date')} → {trip.get('end_date')} | "
+    f"**Days:** {trip.get('days')} | **Travelers:** {trip.get('travelers')}"
+)
+
 
 # ---- Expense Input Form ----
 st.markdown("### ➕ Add a New Expense")
