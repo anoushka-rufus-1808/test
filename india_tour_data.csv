@@ -1,0 +1,50 @@
+Destination,State,HotelCost,FoodCost,ActivitiesCost,TransportCost,Category
+Agra,Uttar Pradesh,2500,800,1500,600,Heritage
+Jaipur,Rajasthan,3000,900,1800,700,Heritage
+Delhi,Delhi,2800,850,1600,650,City Tour
+Mumbai,Maharashtra,4000,1000,2000,900,City Tour
+Goa,Goa,3500,900,2200,800,Beach
+Varanasi,Uttar Pradesh,2000,700,1400,500,Spiritual
+Kolkata,West Bengal,2600,850,1600,600,City Tour
+Hyderabad,Telangana,3000,800,1700,700,City Tour
+Bengaluru,Karnataka,3200,900,1800,750,City Tour
+Chennai,Tamil Nadu,2800,850,1600,700,City Tour
+Pune,Maharashtra,2700,850,1500,650,City Tour
+Kochi,Kerala,2900,900,1800,750,Backwaters
+Munnar,Kerala,3500,900,2000,800,Hill Station
+Alleppey,Kerala,3200,850,2100,750,Backwaters
+Shimla,Himachal Pradesh,3500,900,2000,850,Hill Station
+Manali,Himachal Pradesh,3800,950,2200,900,Hill Station
+Darjeeling,West Bengal,3400,900,2000,850,Hill Station
+Gangtok,Sikkim,3600,900,2100,900,Hill Station
+Udaipur,Rajasthan,3500,900,2000,800,Heritage
+Jodhpur,Rajasthan,3000,850,1800,700,Heritage
+Rishikesh,Uttarakhand,2500,800,1700,600,Adventure
+Haridwar,Uttarakhand,2400,800,1600,600,Spiritual
+Amritsar,Punjab,2600,850,1500,650,Spiritual
+Leh,Ladakh,4500,1000,2500,1200,Adventure
+Srinagar,Jammu & Kashmir,4000,950,2300,1100,Hill Station
+Nainital,Uttarakhand,3000,850,1900,750,Hill Station
+Ooty,Tamil Nadu,3200,900,2000,800,Hill Station
+Mysore,Karnataka,2700,850,1600,650,Heritage
+Ranchi,Jharkhand,2200,750,1400,600,City Tour
+Bhubaneswar,Odisha,2600,800,1600,650,City Tour
+Puri,Odisha,2800,850,1800,700,Beach
+Andaman & Nicobar Islands,Andaman,6000,1200,3000,1500,Island
+Lakshadweep,Lakshadweep,6500,1300,3500,1600,Island
+Mount Abu,Rajasthan,3000,850,1800,750,Hill Station
+Coorg,Karnataka,3500,900,2000,850,Hill Station
+Hampi,Karnataka,2500,800,1700,650,Heritage
+Kodaikanal,Tamil Nadu,3200,900,2000,800,Hill Station
+Auli,Uttarakhand,4000,950,2300,1000,Ski Destination
+Gwalior,Madhya Pradesh,2600,800,1600,650,Heritage
+Khajuraho,Madhya Pradesh,3000,850,1800,750,Heritage
+Pachmarhi,Madhya Pradesh,2800,850,1800,750,Hill Station
+Shillong,Meghalaya,3500,900,2000,900,Hill Station
+Cherrapunji,Meghalaya,3800,950,2200,950,Hill Station
+Guwahati,Assam,2600,850,1600,700,City Tour
+Kaziranga,Assam,3000,900,2200,850,Wildlife
+Ranthambore,Rajasthan,3500,900,2500,900,Wildlife
+Mussoorie,Uttarakhand,3000,850,1800,750,Hill Station
+Alibaug,Maharashtra,3500,900,2200,850,Beach
+Lonavala,Maharashtra,3200,900,2000,800,Hill Station
