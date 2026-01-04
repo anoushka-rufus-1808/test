@@ -4,11 +4,12 @@ import streamlit as st
 import pandas as pd
 import math
 import requests
-st.cache_data.clear()
+from datetime import date, timedelta
+
 st.set_page_config(page_title="Plan Trip", page_icon="🧭")
 
 st.title("🧭 Smart Trip Planner")
-st.caption("Plan smarter trips with cost estimates and personalization")
+st.caption("Plan smarter trips with cost estimates, dates, and personalization")
 
 # ---- Load Dataset ----
 @st.cache_data
@@ -18,16 +19,13 @@ def load_tour_data():
 try:
     df = load_tour_data()
 except FileNotFoundError:
-    st.error(
-        "❌ Could not find `india_tour_data.csv`.\n\n"
-        "Make sure the file is in the project root or update the path."
-    )
+    st.error("❌ Could not find `india_tour_data.csv`.")
     st.stop()
 
-# ---- Weather API (safe + optional) ----
+# ---- Weather API ----
 def get_weather(city):
     try:
-        API_KEY = "31b5f3e64639d63a06288a47ef6b9783"  # put key here
+        API_KEY = "31b5f3e64639d63a06288a47ef6b9783"
         url = (
             f"https://api.openweathermap.org/data/2.5/weather"
             f"?q={city}&appid={API_KEY}&units=metric"
@@ -45,16 +43,20 @@ destination = st.selectbox("📍 Select Destination", df["Destination"].unique()
 
 col1, col2 = st.columns(2)
 with col1:
-    days = st.number_input("Days of Stay", min_value=1, max_value=30, value=2)
+    start_date = st.date_input("Start Date", value=date.today())
 with col2:
-    travelers = st.number_input("Number of Travelers", min_value=1, max_value=20, value=2)
+    end_date = st.date_input("End Date", value=date.today() + timedelta(days=2))
+
+# auto-calc days
+days = max((end_date - start_date).days, 1)
+
+travelers = st.number_input("Number of Travelers", min_value=1, max_value=20, value=2)
 
 occupancy = st.slider(
     "People per Room",
     min_value=1,
     max_value=4,
-    value=2,
-    help="Used to calculate number of hotel rooms"
+    value=2
 )
 
 budget = st.number_input(
@@ -64,7 +66,6 @@ budget = st.number_input(
     value=20000
 )
 
-# ---- Personalization (UX win, low logic) ----
 travel_style = st.selectbox(
     "Travel Style",
     ["Relaxed", "Adventure", "Budget", "Luxury"]
@@ -75,16 +76,22 @@ pace = st.slider(
     min_value=1,
     max_value=5,
     value=3,
-    help="1 = very relaxed, 5 = tightly packed schedule"
+    help="1 = relaxed, 5 = packed"
 )
 
 # ---- Destination Row ----
 place = df[df["Destination"] == destination].iloc[0]
 
-# ---- Weather Info ----
+# ---- Weather Info + Tips ----
 temp, desc = get_weather(destination)
 if temp:
     st.info(f"🌤 Weather in {destination}: {temp}°C, {desc.capitalize()}")
+
+    # Weather-based suggestion
+    if "rain" in desc.lower():
+        st.warning("🌧 Rain expected. Indoor attractions and buffer time recommended.")
+    elif temp >= 35:
+        st.warning("🔥 High temperature. Plan outdoor activities early morning or evening.")
 
 # ---- Generate Plan ----
 if st.button("✨ Generate Plan"):
@@ -97,10 +104,17 @@ if st.button("✨ Generate Plan"):
 
     total_estimated = hotel_cost + food_cost + activity_cost + transport_cost
 
+    # ---- Pace-based message ----
+    if pace >= 4:
+        st.warning("⚠ Packed itinerary selected. Expect higher fatigue and tighter schedules.")
+    elif pace <= 2:
+        st.info("😌 Relaxed pace selected. Ideal for leisure-focused travel.")
+
     # ---- Trip Summary ----
     st.subheader("🧾 Trip Summary")
     st.markdown(f"""
     - **Destination:** {destination}  
+    - **Dates:** {start_date} → {end_date}  
     - **Duration:** {days} days  
     - **Travelers:** {travelers}  
     - **Travel Style:** {travel_style}  
@@ -108,47 +122,41 @@ if st.button("✨ Generate Plan"):
     - **Rooms Required:** {rooms}
     """)
 
+    # ---- Sample Itinerary ----
+    st.subheader("🗓 Sample Itinerary")
+    for i in range(days):
+        current_day = start_date + timedelta(days=i)
+        st.markdown(f"""
+        **Day {i+1} ({current_day})**
+        - Morning: Local sightseeing & breakfast
+        - Afternoon: Popular attractions & lunch
+        - Evening: Leisure activities / shopping
+        """)
+
     # ---- Cost Breakdown ----
     st.subheader("📊 Estimated Cost Breakdown")
     breakdown = {
-        "Hotel (rooms × nights)": f"₹{hotel_cost:,}",
-        "Food (per person × days)": f"₹{food_cost:,}",
-        "Activities (per person × days)": f"₹{activity_cost:,}",
-        "Transport (fixed)": f"₹{transport_cost:,}"
+        "Hotel": f"₹{hotel_cost:,}",
+        "Food": f"₹{food_cost:,}",
+        "Activities": f"₹{activity_cost:,}",
+        "Transport": f"₹{transport_cost:,}"
     }
-    st.table(pd.DataFrame(breakdown.items(), columns=["Category", "Estimated Cost (₹)"]))
+    st.table(pd.DataFrame(breakdown.items(), columns=["Category", "Cost (₹)"]))
 
     st.metric("💰 Total Estimated Cost", f"₹{total_estimated:,}")
-
-    # ---- Calculation Explanation ----
-    st.subheader("🧮 Cost Calculation Details")
-    st.markdown(f"""
-    - **Rooms** = ceil({travelers} / {occupancy}) = **{rooms}**
-    - **Hotel** = ₹{place['HotelCost']} × {days} × {rooms} = **₹{hotel_cost:,}**
-    - **Food** = ₹{place['FoodCost']} × {days} × {travelers} = **₹{food_cost:,}**
-    - **Activities** = ₹{place['ActivitiesCost']} × {days} × {travelers} = **₹{activity_cost:,}**
-    - **Transport** = **₹{transport_cost:,}**
-    ---
-    **Total** = **₹{total_estimated:,}**
-    """)
 
     # ---- Save to session_state ----
     st.session_state["trip"] = {
         "destination": destination,
+        "start_date": start_date,
+        "end_date": end_date,
         "days": days,
         "travelers": travelers,
-        "occupancy": occupancy,
         "rooms": rooms,
         "estimate": total_estimated,
         "budget": budget,
-        "style": travel_style,
         "pace": pace,
-        "breakdown": {
-            "Hotel": hotel_cost,
-            "Food": food_cost,
-            "Activities": activity_cost,
-            "Transport": transport_cost
-        }
+        "style": travel_style
     }
 
     st.session_state["expenses"] = []
