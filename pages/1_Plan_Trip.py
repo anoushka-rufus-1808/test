@@ -1,10 +1,10 @@
 # pages/1_Plan_Trip.py
-st.cache_data.clear()
+
 import streamlit as st
 import pandas as pd
 import math
 import requests
-
+st.cache_data.clear()
 st.set_page_config(page_title="Plan Trip", page_icon="🧭")
 
 st.title("🧭 Smart Trip Planner")
