@@ -45,5 +45,27 @@ This project demonstrates a complete application workflow combining UI, backend 
 
 ---
 
-## 📁 Repository Structure
+## 🛠️ Installation & Setup
 
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/anoushka-rufus-1808/test
+2. **Navigate into the project**
+    ```bash
+    cd test
+3. **Install dependencies**
+    ```bash
+    pip install -r requirements.txt
+4. **Run the app**
+    ```bash
+    streamlit run app.py
+
+## 🎯 How It Works
+
+1.A user registers or logs in with credentials.
+
+2.Once authenticated, the user enters travel details.
+
+3.The app reads the CSV dataset to compute travel estimations.
+
+4.Results are displayed immediately on the interface.
